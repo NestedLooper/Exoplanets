@@ -11,6 +11,7 @@ const config: Config = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.glsl$': '<rootDir>/src/__mocks__/glslMock.ts',
   },
+  passWithNoTests: true,
 }
 
 export default createJestConfig(config)
