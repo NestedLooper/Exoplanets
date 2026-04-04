@@ -16,8 +16,15 @@ export function classifyPlanet(data: ClassifyInput): PlanetType {
   const t = data.pl_eqt ?? null
   const i = data.pl_insol ?? null
 
-  // Hot Jupiter: extremely large OR hot + large
-  if (r !== null && (r > 10 || (t !== null && t > 1000 && r > 4))) return 'hot-jupiter'
+  // Hot Jupiter: very large (r > 8, no temp needed) OR large + hot OR medium-large + very hot
+  if (
+    r !== null &&
+    (
+      r > 8 ||
+      (t !== null && r > 6 && t > 800) ||
+      (t !== null && r > 4 && t > 1000)
+    )
+  ) return 'hot-jupiter'
 
   // Gas Giant: large and massive
   if (r !== null && m !== null && r > 4 && m > 50) return 'gas-giant'

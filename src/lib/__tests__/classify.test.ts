@@ -13,6 +13,10 @@ describe('classifyPlanet', () => {
     expect(classifyPlanet({ pl_rade: 8, pl_bmasse: 300, pl_eqt: 400 })).toBe('gas-giant')
   })
 
+  it('classifies cool large planet as Gas Giant, not Hot Jupiter', () => {
+    expect(classifyPlanet({ pl_rade: 8, pl_bmasse: 300, pl_eqt: 400 })).toBe('gas-giant')
+  })
+
   it('classifies Sub-Neptune', () => {
     expect(classifyPlanet({ pl_rade: 3, pl_dens: 2 })).toBe('sub-neptune')
   })
