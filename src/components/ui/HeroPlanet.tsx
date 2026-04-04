@@ -11,7 +11,12 @@ const TYPE_LABELS: Record<string, string> = {
   'ocean-world': 'Ocean World', 'rocky': 'Rocky', 'unknown': 'Unknown',
 }
 
-export function HeroPlanet({ planet }: { planet: PlanetData }) {
+interface HeroPlanetProps {
+  planet: PlanetData
+  randomPlanetName?: string
+}
+
+export function HeroPlanet({ planet, randomPlanetName }: HeroPlanetProps) {
   const type = planet.planetType ?? 'unknown'
   const href = `/planet/${encodeURIComponent(planet.pl_name)}`
 
@@ -68,7 +73,7 @@ export function HeroPlanet({ planet }: { planet: PlanetData }) {
             Explore Planet →
           </Link>
           <Link
-            href="/?random=1"
+            href={randomPlanetName ? `/planet/${encodeURIComponent(randomPlanetName)}` : '/'}
             className="rounded-lg border border-slate-700 px-5 py-2.5 text-sm font-medium text-slate-300 transition hover:border-blue-500 hover:text-white"
           >
             ✦ Random
