@@ -56,16 +56,22 @@ function StarMapScene({ stars, highlight, logScale }: StarMapSceneProps) {
 
   const linePrimitive = useMemo(() => {
     if (highlightedIdx < 0) return null
-    const geo = new THREE.BufferGeometry()
-    geo.setAttribute(
-      'position',
-      new THREE.BufferAttribute(
-        new Float32Array([0, 0, 0, ...positions[highlightedIdx].toArray()]),
-        3,
-      ),
-    )
-    const mat = new THREE.LineBasicMaterial({ color: '#ffd06044', transparent: true, opacity: 0.3 })
-    return new THREE.Line(geo, mat)
+    const lineGeo = new THREE.BufferGeometry()
+    lineGeo.setAttribute('position', new THREE.BufferAttribute(
+      new Float32Array([0, 0, 0, ...positions[highlightedIdx].toArray()]), 3
+    ))
+    lineGeo.computeBoundingSphere()
+    // computeLineDistances is required for LineDashedMaterial
+    const lineMat = new THREE.LineDashedMaterial({
+      color: '#ffd060',
+      transparent: true,
+      opacity: 0.35,
+      dashSize: 0.4,
+      gapSize: 0.3,
+    })
+    const linePrimitive = new THREE.Line(lineGeo, lineMat)
+    linePrimitive.computeLineDistances()
+    return linePrimitive
   }, [positions, highlightedIdx])
 
   return (
