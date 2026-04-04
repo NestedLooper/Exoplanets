@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Star Location Options</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #07071a; color: #ccd; font-family: system-ui, sans-serif; padding: 24px; }
+h2 { font-size: 18px; margin-bottom: 6px; }
+.subtitle { color: #666; font-size: 13px; margin-bottom: 20px; }
+.options { display: flex; flex-direction: column; gap: 20px; }
+.option { background: #0d0d22; border: 2px solid #1e1e4a; border-radius: 12px; padding: 20px; cursor: pointer; transition: border-color 0.2s; }
+.option:hover { border-color: #4a7aff; }
+.option.selected { border-color: #4a7aff; }
+.option-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.letter { width: 28px; height: 28px; border-radius: 50%; background: #1e1e4a; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #4a7aff; flex-shrink: 0; }
+.option-title { font-size: 14px; font-weight: 600; }
+.option-desc { font-size: 11px; color: #666; }
+.mock { background: #060614; border-radius: 8px; padding: 14px; border: 1px solid #12123a; }
+canvas { display: block; }
+</style>
+</head>
+<body>
+
+<h2>Showing Planet/Star Location Relative to Earth</h2>
+<p class="subtitle">We have RA, Dec, and distance in parsecs — three ways to use them</p>
+
+<div class="options">
+
+  <!-- Option A: 3D Neighborhood Globe -->
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="option-header">
+      <div class="letter">A</div>
+      <div>
+        <div class="option-title">Interactive 3D Star Neighborhood</div>
+        <div class="option-desc">A Three.js globe showing nearby stars plotted in true 3D space. Earth at center, selected star highlighted. Drag to rotate the view.</div>
+      </div>
+    </div>
+    <div class="mock">
+      <div style="display:flex;gap:14px;align-items:flex-start">
+        <canvas id="globe" width="220" height="220" style="border-radius:8px;flex-shrink:0"></canvas>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding-top:4px">
+          <div style="font-size:10px;color:#4a7aff;letter-spacing:1px;text-transform:uppercase">Kepler-452 System</div>
+          <div style="font-size:11px;color:#888;line-height:1.6">Plots every star within <strong style="color:#aaa">2,000 light years</strong> of Earth using real RA/Dec/distance from the TAP API. Selected star shown in gold.</div>
+          <div style="display:flex;flex-direction:column;gap:5px;margin-top:4px">
+            <div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:#4af;flex-shrink:0"></div><div style="font-size:10px;color:#666">Our Solar System (Earth)</div></div>
+            <div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:#fc0;flex-shrink:0"></div><div style="font-size:10px;color:#666">Kepler-452 — 1,402 ly</div></div>
+            <div style="display:flex;align-items:center;gap:8px"><div style="width:6px;height:6px;border-radius:50%;background:#334;flex-shrink:0"></div><div style="font-size:10px;color:#666">Other known exoplanet hosts</div></div>
+          </div>
+          <div style="margin-top:6px;font-size:10px;color:#555;font-style:italic">Drag to orbit · Scroll to zoom · Lives on the detail page below the stat panel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option B: Sky Map (2D) -->
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="option-header">
+      <div class="letter">B</div>
+      <div>
+        <div class="option-title">2D Sky Chart — Where to Look</div>
+        <div class="option-desc">Shows where in Earth's night sky this star appears, with constellation context. Practical — you could actually go find it.</div>
+      </div>
+    </div>
+    <div class="mock">
+      <div style="display:flex;gap:14px;align-items:flex-start">
+        <canvas id="skymap" width="220" height="220" style="border-radius:50%;flex-shrink:0"></canvas>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding-top:4px">
+          <div style="font-size:10px;color:#4a7aff;letter-spacing:1px;text-transform:uppercase">Find it in the Sky</div>
+          <div style="font-size:11px;color:#888;line-height:1.6">A circular all-sky projection centered on the zenith. Shows the star's position using RA/Dec, with major constellation lines for reference.</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Constellation</span><span style="color:#ccd;font-size:10px">Cygnus</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Right Ascension</span><span style="color:#ccd;font-size:10px">19h 44m</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Declination</span><span style="color:#ccd;font-size:10px">+45° 26'</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Distance</span><span style="color:#ccd;font-size:10px">1,402 ly</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option C: Both — Dedicated /map page + mini widget on detail -->
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="option-header">
+      <div class="letter">C</div>
+      <div>
+        <div class="option-title">Both — Mini Widget + Dedicated /map Page</div>
+        <div class="option-desc">A small sky-position widget on the detail page, plus a full /map route with the interactive 3D neighborhood for exploring all known systems at once.</div>
+      </div>
+    </div>
+    <div class="mock">
+      <div style="display:flex;gap:10px">
+        <!-- Detail page snippet -->
+        <div style="flex:1;background:#0a0a1e;border:1px solid #1e1e4a;border-radius:8px;padding:12px">
+          <div style="font-size:9px;color:#4a7aff;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Location</div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <canvas id="minisky" width="64" height="64" style="border-radius:50%;flex-shrink:0"></canvas>
+            <div style="font-size:9px;color:#666;line-height:1.6">Cygnus · 1,402 ly<br/>RA 19h 44m · Dec +45°<br/><span style="color:#4a7aff;cursor:pointer">View on star map →</span></div>
+          </div>
+        </div>
+        <!-- Map page snippet -->
+        <div style="flex:1.4;background:#0a0a1e;border:1px solid #1e1e4a;border-radius:8px;padding:12px">
+          <div style="font-size:9px;color:#4a7aff;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">/map — All Known Systems</div>
+          <canvas id="miniglobe" width="160" height="110" style="border-radius:6px;width:100%"></canvas>
+          <div style="font-size:9px;color:#555;margin-top:6px;text-align:center">Click any star to jump to its planet detail page</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Seeded noise helpers
+function hash(n) { let s=n&0xffffffff;s=(s^61)^(s>>>16);s=s+(s<<3)|0;s=s^(s>>>4);s=(s*0x27d4eb2d)|0;s=s^(s>>>15);return(s>>>0)/0xffffffff; }
+
+// --- GLOBE (Option A) ---
+(function() {
+  const cv = document.getElementById('globe');
+  const ctx = cv.getContext('2d');
+  const W=220, H=220, cx=W/2, cy=H/2, r=100;
+
+  // Dark space bg
+  ctx.fillStyle = '#030310';
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+
+  // Grid lines (longitude/latitude of the 3D space view)
+  ctx.strokeStyle = '#0d0d2a'; ctx.lineWidth = 0.8;
+  for(let i=0;i<6;i++) {
+    const a = (i/6)*Math.PI*2;
+    ctx.beginPath(); ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+Math.cos(a)*r, cy+Math.sin(a)*r); ctx.stroke();
+  }
+  for(let ri=1;ri<=4;ri++) {
+    ctx.beginPath(); ctx.arc(cx,cy,(ri/4)*r,0,Math.PI*2); ctx.stroke();
+  }
+
+  // Distance rings label
+  ctx.fillStyle = '#1a1a4a'; ctx.font='8px system-ui'; ctx.textAlign='center';
+  ctx.fillText('500 ly', cx+52, cy-3);
+  ctx.fillText('1000 ly', cx+77, cy-3);
+  ctx.fillText('1500 ly', cx+102, cy-3);
+
+  // Plot fake nearby exoplanet host stars (random but seeded)
+  const stars = [];
+  for(let i=0;i<80;i++) {
+    const angle = hash(i*7+1)*Math.PI*2;
+    const dist = Math.pow(hash(i*7+2), 0.5) * r * 0.95;
+    const x = cx + Math.cos(angle)*dist;
+    const y = cy + Math.sin(angle)*dist;
+    const sz = hash(i*7+3)*1.5+0.4;
+    stars.push({x,y,sz});
+  }
+  stars.forEach(({x,y,sz}) => {
+    ctx.beginPath(); ctx.arc(x,y,sz,0,Math.PI*2);
+    ctx.fillStyle = `rgba(80,100,180,${0.4+sz*0.2})`; ctx.fill();
+  });
+
+  // Earth (center)
+  ctx.beginPath(); ctx.arc(cx,cy,5,0,Math.PI*2);
+  const eg = ctx.createRadialGradient(cx-1,cy-1,0,cx,cy,5);
+  eg.addColorStop(0,'#6af'); eg.addColorStop(1,'#2a6a8a');
+  ctx.fillStyle=eg; ctx.fill();
+  ctx.fillStyle='#4af'; ctx.font='8px system-ui'; ctx.textAlign='left';
+  ctx.fillText('Earth',cx+7,cy+3);
+
+  // Kepler-452 highlighted
+  const kx = cx + Math.cos(0.8)*97, ky = cy + Math.sin(0.8)*97;
+  // glow
+  const kg = ctx.createRadialGradient(kx,ky,0,kx,ky,12);
+  kg.addColorStop(0,'rgba(255,220,50,0.4)'); kg.addColorStop(1,'rgba(255,220,50,0)');
+  ctx.beginPath(); ctx.arc(kx,ky,12,0,Math.PI*2); ctx.fillStyle=kg; ctx.fill();
+  ctx.beginPath(); ctx.arc(kx,ky,4,0,Math.PI*2);
+  const sg = ctx.createRadialGradient(kx-1,ky-1,0,kx,ky,4);
+  sg.addColorStop(0,'#fff8c0'); sg.addColorStop(1,'#ffa500');
+  ctx.fillStyle=sg; ctx.fill();
+
+  // Line from Earth to Kepler-452
+  ctx.strokeStyle='rgba(255,200,50,0.25)'; ctx.lineWidth=0.8; ctx.setLineDash([3,4]);
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(kx,ky); ctx.stroke(); ctx.setLineDash([]);
+
+  ctx.fillStyle='#fc0'; ctx.font='bold 8px system-ui'; ctx.textAlign='left';
+  ctx.fillText('Kepler-452',kx+6,ky+3);
+
+  // Clip to circle
+  ctx.save(); ctx.globalCompositeOperation='destination-in';
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+})();
+
+// --- SKY MAP (Option B) ---
+(function() {
+  const cv = document.getElementById('skymap');
+  const ctx = cv.getContext('2d');
+  const W=220,H=220,cx=W/2,cy=H/2,r=105;
+
+  // Dark sky
+  const bg = ctx.createRadialGradient(cx,cy,0,cx,cy,r);
+  bg.addColorStop(0,'#0a0a20'); bg.addColorStop(1,'#030310');
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fillStyle=bg; ctx.fill();
+
+  // Stars bg
+  for(let i=0;i<200;i++) {
+    const a=hash(i*3)*Math.PI*2, d=Math.sqrt(hash(i*3+1))*r*0.98;
+    const x=cx+Math.cos(a)*d, y=cy+Math.sin(a)*d;
+    const sz=hash(i*3+2)*1.2+0.2;
+    ctx.beginPath(); ctx.arc(x,y,sz,0,Math.PI*2);
+    ctx.fillStyle=`rgba(200,210,255,${0.2+sz*0.3})`; ctx.fill();
+  }
+
+  // RA grid circles
+  ctx.strokeStyle='rgba(30,30,80,0.8)'; ctx.lineWidth=0.6;
+  for(let ri=1;ri<=3;ri++) {
+    ctx.beginPath(); ctx.arc(cx,cy,(ri/3)*r,0,Math.PI*2); ctx.stroke();
+  }
+  // Dec lines
+  for(let i=0;i<12;i++) {
+    const a=(i/12)*Math.PI*2;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r); ctx.stroke();
+  }
+
+  // Constellation lines (fake Cygnus-ish)
+  const consStars = [
+    [cx+20,cy-40],[cx+35,cy-15],[cx+50,cy+10],[cx+20,cy+30],[cx-10,cy+15],
+    [cx+35,cy-15],[cx+60,cy-30],[cx+10,cy-55],[cx+35,cy-15]
+  ];
+  ctx.strokeStyle='rgba(60,80,160,0.5)'; ctx.lineWidth=0.8;
+  ctx.beginPath();
+  consStars.forEach(([x,y],i) => i===0?ctx.moveTo(x,y):ctx.lineTo(x,y));
+  ctx.stroke();
+  consStars.forEach(([x,y]) => {
+    ctx.beginPath(); ctx.arc(x,y,1.5,0,Math.PI*2);
+    ctx.fillStyle='rgba(160,180,255,0.7)'; ctx.fill();
+  });
+  // label
+  ctx.fillStyle='rgba(80,100,200,0.7)'; ctx.font='8px system-ui'; ctx.textAlign='center';
+  ctx.fillText('CYGNUS',cx+35,cy-68);
+
+  // Kepler-452 position
+  const kx=cx+40, ky=cy-28;
+  const kg=ctx.createRadialGradient(kx,ky,0,kx,ky,14);
+  kg.addColorStop(0,'rgba(255,220,100,0.5)'); kg.addColorStop(1,'rgba(255,220,100,0)');
+  ctx.beginPath(); ctx.arc(kx,ky,14,0,Math.PI*2); ctx.fillStyle=kg; ctx.fill();
+  ctx.beginPath(); ctx.arc(kx,ky,4,0,Math.PI*2);
+  const sg=ctx.createRadialGradient(kx-1,ky-1,0,kx,ky,4);
+  sg.addColorStop(0,'#fffce0'); sg.addColorStop(1,'#ffcc44');
+  ctx.fillStyle=sg; ctx.fill();
+
+  // crosshair
+  ctx.strokeStyle='rgba(255,200,50,0.5)'; ctx.lineWidth=0.8;
+  ctx.beginPath(); ctx.moveTo(kx-10,ky); ctx.lineTo(kx+10,ky); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(kx,ky-10); ctx.lineTo(kx,ky+10); ctx.stroke();
+
+  ctx.fillStyle='#fc8'; ctx.font='bold 8px system-ui'; ctx.textAlign='left';
+  ctx.fillText('Kepler-452',kx+7,ky-4);
+
+  // clip
+  ctx.save(); ctx.globalCompositeOperation='destination-in';
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+
+  // Border
+  ctx.strokeStyle='#1e1e4a'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+})();
+
+// --- MINI SKY (Option C left) ---
+(function() {
+  const cv = document.getElementById('minisky');
+  const ctx = cv.getContext('2d');
+  const W=64,H=64,cx=32,cy=32,r=30;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.fillStyle='#030310'; ctx.fill();
+  for(let i=0;i<60;i++){
+    const a=hash(i*3)*Math.PI*2,d=Math.sqrt(hash(i*3+1))*r*0.9;
+    ctx.beginPath();ctx.arc(cx+Math.cos(a)*d,cy+Math.sin(a)*d,hash(i*3+2)*0.9+0.2,0,Math.PI*2);
+    ctx.fillStyle='rgba(200,210,255,0.4)';ctx.fill();
+  }
+  const kx=cx+12,ky=cy-8;
+  const kg=ctx.createRadialGradient(kx,ky,0,kx,ky,6);
+  kg.addColorStop(0,'rgba(255,220,100,0.5)');kg.addColorStop(1,'transparent');
+  ctx.beginPath();ctx.arc(kx,ky,6,0,Math.PI*2);ctx.fillStyle=kg;ctx.fill();
+  ctx.beginPath();ctx.arc(kx,ky,2.5,0,Math.PI*2);ctx.fillStyle='#ffd060';ctx.fill();
+  ctx.save();ctx.globalCompositeOperation='destination-in';
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();ctx.restore();
+  ctx.strokeStyle='#1e1e4a';ctx.lineWidth=1;
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
+})();
+
+// --- MINI GLOBE (Option C right) ---
+(function() {
+  const cv = document.getElementById('miniglobe');
+  const ctx = cv.getContext('2d');
+  const W=cv.width,H=cv.height,cx=W/2,cy=H/2;
+  ctx.fillStyle='#030310'; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#0d0d28'; ctx.lineWidth=0.5;
+  for(let i=1;i<=4;i++){ctx.beginPath();ctx.arc(cx,cy,(i/4)*Math.min(W,H)*0.48,0,Math.PI*2);ctx.stroke();}
+  for(let i=0;i<80;i++){
+    const a=hash(i*5)*Math.PI*2,d=Math.pow(hash(i*5+1),0.5)*Math.min(W,H)*0.46;
+    ctx.beginPath();ctx.arc(cx+Math.cos(a)*d,cy+Math.sin(a)*d,hash(i*5+2)*1.2+0.3,0,Math.PI*2);
+    ctx.fillStyle=`rgba(60,80,160,${0.4+hash(i*5+3)*0.4})`;ctx.fill();
+  }
+  // Earth
+  ctx.beginPath();ctx.arc(cx,cy,4,0,Math.PI*2);
+  const eg=ctx.createRadialGradient(cx-1,cy-1,0,cx,cy,4);
+  eg.addColorStop(0,'#6af');eg.addColorStop(1,'#2a6a8a');
+  ctx.fillStyle=eg;ctx.fill();
+  // Selected star (Kepler-452)
+  const kx=cx+Math.cos(0.8)*74,ky=cy+Math.sin(0.8)*74;
+  const kg=ctx.createRadialGradient(kx,ky,0,kx,ky,8);
+  kg.addColorStop(0,'rgba(255,220,50,0.5)');kg.addColorStop(1,'transparent');
+  ctx.beginPath();ctx.arc(kx,ky,8,0,Math.PI*2);ctx.fillStyle=kg;ctx.fill();
+  ctx.beginPath();ctx.arc(kx,ky,3,0,Math.PI*2);ctx.fillStyle='#ffd060';ctx.fill();
+  ctx.strokeStyle='rgba(255,200,50,0.3)';ctx.lineWidth=0.8;ctx.setLineDash([2,3]);
+  ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(kx,ky);ctx.stroke();ctx.setLineDash([]);
+})();
+
+function toggleSelect(el) {
+  document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  if(window.recordChoice) recordChoice(el.dataset.choice, el.querySelector('.option-title').textContent);
+}
+</script>
+</body>
+</html>

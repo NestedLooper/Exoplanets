@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Realistic Planet Previews</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #07071a; color: #ccd; font-family: system-ui, sans-serif; padding: 24px; }
+  h2 { font-size: 18px; margin-bottom: 6px; }
+  .subtitle { color: #666; font-size: 13px; margin-bottom: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card { background: #0d0d22; border: 1px solid #1e1e4a; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .planet-wrap { position: relative; width: 120px; height: 120px; }
+  canvas { border-radius: 50%; display: block; }
+  .atmosphere { position: absolute; inset: -6px; border-radius: 50%; pointer-events: none; }
+  .label { font-size: 13px; font-weight: 600; color: #dde; }
+  .desc { font-size: 11px; color: #666; text-align: center; line-height: 1.5; }
+  .tag { font-size: 9px; color: #4a7aff; letter-spacing: 1px; text-transform: uppercase; }
+  .note { margin-top: 20px; background: #0a0a1e; border: 1px solid #1e2e4a; border-radius: 8px; padding: 12px 16px; font-size: 11px; color: #667; line-height: 1.6; }
+  .note strong { color: #4a7aff; }
+</style>
+</head>
+<body>
+
+<h2>Realistic Planet Visuals — Procedural Preview</h2>
+<p class="subtitle">Approximation of what the Three.js GLSL shaders will produce. All generated from data, no textures.</p>
+
+<div class="grid">
+
+  <!-- Gas Giant - Jupiter-like -->
+  <div class="card">
+    <div class="planet-wrap">
+      <canvas id="c-gas" width="120" height="120"></canvas>
+      <div class="atmosphere" style="box-shadow: 0 0 18px 6px rgba(240,180,80,0.2), inset 0 0 12px rgba(0,0,0,0.4);"></div>
+    </div>
+    <div class="tag">Gas Giant</div>
+    <div class="label">Jupiter-class</div>
+    <div class="desc">Horizontal cloud bands, turbulent storm systems, warm amber palette. Band color shifts with equilibrium temp.</div>
+  </div>
+
+  <!-- Hot Jupiter -->
+  <div class="card">
+    <div class="planet-wrap">
+      <canvas id="c-hotjup" width="120" height="120"></canvas>
+      <div class="atmosphere" style="box-shadow: 0 0 22px 10px rgba(255,80,20,0.25), inset 0 0 12px rgba(0,0,0,0.3);"></div>
+    </div>
+    <div class="tag">Hot Jupiter</div>
+    <div class="label">Scorched Giant</div>
+    <div class="desc">Glowing red-orange surface, atmospheric ablation on the star-facing side, visible heat gradient.</div>
+  </div>
+
+  <!-- Ice Giant - Neptune-like -->
+  <div class="card">
+    <div class="planet-wrap">
+      <canvas id="c-ice" width="120" height="120"></canvas>
+      <div class="atmosphere" style="box-shadow: 0 0 20px 8px rgba(80,160,255,0.22), inset 0 0 10px rgba(0,0,0,0.3);"></div>
+    </div>
+    <div class="tag">Sub-Neptune / Ice Giant</div>
+    <div class="label">Neptune-class</div>
+    <div class="desc">Deep blue haze, subtle banding, wispy high-altitude clouds. Color intensity from insolation flux.</div>
+  </div>
+
+  <!-- Earth-like -->
+  <div class="card">
+    <div class="planet-wrap">
+      <canvas id="c-earth" width="120" height="120"></canvas>
+      <canvas id="c-clouds" width="120" height="120" style="position:absolute;top:0;left:0;border-radius:50%;opacity:0.55;"></canvas>
+      <div class="atmosphere" style="box-shadow: 0 0 18px 7px rgba(100,180,255,0.2), inset 0 0 10px rgba(0,0,0,0.3);"></div>
+    </div>
+    <div class="tag">Super-Earth / Habitable</div>
+    <div class="label">Earth-like</div>
+    <div class="desc">Procedural continents, ocean specular shine, animated cloud layer, polar ice caps. Land/water ratio from density.</div>
+  </div>
+
+  <!-- Ocean World -->
+  <div class="card">
+    <div class="planet-wrap">
+      <canvas id="c-ocean" width="120" height="120"></canvas>
+      <canvas id="c-ocean-clouds" width="120" height="120" style="position:absolute;top:0;left:0;border-radius:50%;opacity:0.4;"></canvas>
+      <div class="atmosphere" style="box-shadow: 0 0 18px 7px rgba(60,140,255,0.22), inset 0 0 10px rgba(0,0,0,0.3);"></div>
+    </div>
+    <div class="tag">Water World</div>
+    <div class="label">Ocean Planet</div>
+    <div class="desc">Endless ocean with specular highlights, thick cloud cover, polar ice from equilibrium temperature.</div>
+  </div>
+
+  <!-- Rocky / Mars-like -->
+  <div class="card">
+    <div class="planet-wrap">
+      <canvas id="c-rocky" width="120" height="120"></canvas>
+      <div class="atmosphere" style="box-shadow: 0 0 10px 3px rgba(180,80,30,0.12), inset 0 0 8px rgba(0,0,0,0.5);"></div>
+    </div>
+    <div class="tag">Rocky / Terrestrial</div>
+    <div class="label">Mars/Moon-class</div>
+    <div class="desc">Cratered rust-red surface, volcanic highlands, dust storms. Lava cracks appear if temp exceeds 1000K.</div>
+  </div>
+
+</div>
+
+<div class="note">
+  <strong>In Three.js:</strong> Each planet is a <code>THREE.Sphere</code> with a custom <code>ShaderMaterial</code> using Simplex noise in GLSL to generate terrain, bands, and clouds procedurally — seeded from the planet's name so each one is unique but consistent. A second transparent sphere layer handles clouds and atmosphere glow. Drag-to-rotate and zoom included.
+</div>
+
+<script>
+// Seeded pseudo-random
+function seededRng(seed) {
+  let s = seed;
+  return () => { s = (s * 1664525 + 1013904223) & 0xffffffff; return (s >>> 0) / 0xffffffff; };
+}
+
+function smoothstep(t) { return t * t * (3 - 2 * t); }
+
+// Simple 2D noise
+function noise2d(x, y, rng) {
+  const ix = Math.floor(x), iy = Math.floor(y);
+  const fx = x - ix, fy = y - iy;
+  const r00 = seededRng((ix * 1999 + iy * 3779) & 0xffff)();
+  const r10 = seededRng(((ix+1) * 1999 + iy * 3779) & 0xffff)();
+  const r01 = seededRng((ix * 1999 + (iy+1) * 3779) & 0xffff)();
+  const r11 = seededRng(((ix+1) * 1999 + (iy+1) * 3779) & 0xffff)();
+  const sx = smoothstep(fx), sy = smoothstep(fy);
+  return r00*(1-sx)*(1-sy) + r10*sx*(1-sy) + r01*(1-sx)*sy + r11*sx*sy;
+}
+
+function fbm(x, y, octaves=5) {
+  let v=0, amp=0.5, freq=1, max=0;
+  for(let i=0;i<octaves;i++) { v+=noise2d(x*freq,y*freq)*amp; max+=amp; amp*=0.5; freq*=2.1; }
+  return v/max;
+}
+
+// Lighting helper
+function lightFactor(px, py, r, lightX, lightY) {
+  const nx = (px - r) / r, ny = (py - r) / r;
+  const nz = Math.sqrt(Math.max(0, 1 - nx*nx - ny*ny));
+  const lx = (lightX - r) / r, ly = (lightY - r) / r;
+  const lz = 0.6;
+  const l = Math.sqrt(lx*lx+ly*ly+lz*lz);
+  return Math.max(0, (nx*lx/l + ny*ly/l + nz*lz/l));
+}
+
+// ---- GAS GIANT (Jupiter) ----
+(function() {
+  const cv = document.getElementById('c-gas');
+  const ctx = cv.getContext('2d');
+  const r = 60, cx = 60, cy = 60;
+  const img = ctx.createImageData(120, 120);
+  const d = img.data;
+  const colors = [
+    [240,200,140],[200,140,80],[180,110,60],[220,170,100],[160,90,50],[230,190,120]
+  ];
+  for(let y=0;y<120;y++) for(let x=0;x<120;x++) {
+    const dx=x-cx,dy=y-cy;
+    if(dx*dx+dy*dy>r*r) continue;
+    const u=(x/120)*8, v=(y/120)*8;
+    const band = (y/120)*6;
+    const turbulence = fbm(u*0.8, v*0.3)*1.2 - 0.1;
+    const bandIdx = Math.floor((band + turbulence*1.5) % colors.length);
+    const ci = ((bandIdx % colors.length) + colors.length) % colors.length;
+    const [rv,gv,bv] = colors[ci];
+    const t2 = fbm(u*0.4+1,v*0.4+1)*0.3;
+    const lf = lightFactor(x,y,r,35,35);
+    const lit = 0.4+lf*0.7;
+    const i=(y*120+x)*4;
+    d[i]   = Math.min(255,(rv+t2*40)*lit);
+    d[i+1] = Math.min(255,(gv+t2*20)*lit);
+    d[i+2] = Math.min(255,(bv)*lit);
+    d[i+3] = 255;
+  }
+  ctx.putImageData(img,0,0);
+})();
+
+// ---- HOT JUPITER ----
+(function() {
+  const cv = document.getElementById('c-hotjup');
+  const ctx = cv.getContext('2d');
+  const r = 60, cx = 60, cy = 60;
+  const img = ctx.createImageData(120, 120);
+  const d = img.data;
+  for(let y=0;y<120;y++) for(let x=0;x<120;x++) {
+    const dx=x-cx,dy=y-cy;
+    if(dx*dx+dy*dy>r*r) continue;
+    const u=(x/120)*6, v=(y/120)*6;
+    const n = fbm(u,v);
+    const heat = n*0.6 + (1-(x/120))*0.4; // hotter on left (star-facing)
+    const lf = lightFactor(x,y,r,25,35);
+    const lit = 0.35+lf*0.75;
+    const i=(y*120+x)*4;
+    d[i]   = Math.min(255,(180+heat*75)*lit);
+    d[i+1] = Math.min(255,(40+heat*40)*lit);
+    d[i+2] = Math.min(255,(10)*lit);
+    d[i+3] = 255;
+  }
+  ctx.putImageData(img,0,0);
+})();
+
+// ---- ICE GIANT (Neptune) ----
+(function() {
+  const cv = document.getElementById('c-ice');
+  const ctx = cv.getContext('2d');
+  const r = 60;
+  const img = ctx.createImageData(120, 120);
+  const d = img.data;
+  for(let y=0;y<120;y++) for(let x=0;x<120;x++) {
+    const dx=x-60,dy=y-60;
+    if(dx*dx+dy*dy>r*r) continue;
+    const u=(x/120)*5, v=(y/120)*5;
+    const band = Math.sin((y/120)*Math.PI*7)*0.5+0.5;
+    const n = fbm(u*0.5,v*0.3)*0.5;
+    const base = band*0.6+n*0.4;
+    const lf = lightFactor(x,y,r,35,35);
+    const lit = 0.4+lf*0.7;
+    const i=(y*120+x)*4;
+    d[i]   = Math.min(255,(20+base*40)*lit);
+    d[i+1] = Math.min(255,(60+base*80)*lit);
+    d[i+2] = Math.min(255,(160+base*90)*lit);
+    d[i+3] = 255;
+  }
+  ctx.putImageData(img,0,0);
+})();
+
+// ---- EARTH-LIKE ----
+(function() {
+  const cv = document.getElementById('c-earth');
+  const ctx = cv.getContext('2d');
+  const r = 60;
+  const img = ctx.createImageData(120, 120);
+  const d = img.data;
+  for(let y=0;y<120;y++) for(let x=0;x<120;x++) {
+    const dx=x-60,dy=y-60;
+    if(dx*dx+dy*dy>r*r) continue;
+    const u=(x/120)*4+2, v=(y/120)*4+2;
+    const n = fbm(u,v);
+    const isLand = n > 0.52;
+    const latFrac = Math.abs(y-60)/60;
+    const isPole = latFrac > 0.82;
+    const lf = lightFactor(x,y,r,35,30);
+    const lit = 0.35+lf*0.8;
+    let rv,gv,bv;
+    if(isPole) { rv=220;gv=235;bv=255; }
+    else if(isLand) {
+      const elev = (n-0.52)*5;
+      if(elev>0.6) { rv=140;gv=120;bv=90; } // mountains
+      else { rv=60+elev*40;gv=110+elev*20;bv=40; } // grass
+    } else {
+      const depth=(0.52-n)*4;
+      rv=10+depth*5; gv=60+depth*10; bv=140+depth*60;
+    }
+    const i=(y*120+x)*4;
+    d[i]=Math.min(255,rv*lit); d[i+1]=Math.min(255,gv*lit); d[i+2]=Math.min(255,bv*lit); d[i+3]=255;
+  }
+  ctx.putImageData(img,0,0);
+
+  // Cloud layer
+  const cc = document.getElementById('c-clouds');
+  const cctx = cc.getContext('2d');
+  const ci2 = cctx.createImageData(120,120);
+  const cd = ci2.data;
+  for(let y=0;y<120;y++) for(let x=0;x<120;x++) {
+    const dx=x-60,dy=y-60;
+    if(dx*dx+dy*dy>r*r) continue;
+    const u=(x/120)*5+10,v=(y/120)*5+10;
+    const n2=fbm(u,v,4);
+    const alpha = Math.max(0,n2-0.45)*5;
+    const lf=lightFactor(x,y,r,35,30);
+    const lit=0.5+lf*0.6;
+    const i=(y*120+x)*4;
+    cd[i]=Math.min(255,240*lit); cd[i+1]=Math.min(255,245*lit); cd[i+2]=Math.min(255,255*lit);
+    cd[i+3]=Math.min(255,alpha*255);
+  }
+  cctx.putImageData(ci2,0,0);
+})();
+
+// ---- OCEAN WORLD ----
+(function() {
+  const cv = document.getElementById('c-ocean');
+  const ctx = cv.getContext('2d');
+  const r = 60;
+  const img = ctx.createImageData(120,120);
+  const d = img.data;
+  for(let y=0;y<120;y++) for(let x=0;x<120;x++) {
+    const dx=x-60,dy=y-60;
+    if(dx*dx+dy*dy>r*r) continue;
+    const u=(x/120)*4+5,v=(y/120)*4+5;
+    const n=fbm(u,v);
+    const latFrac=Math.abs(y-60)/60;
+    const isPole=latFrac>0.85;
+    const lf=lightFactor(x,y,r,35,30);
+    const lit=0.35+lf*0.8;
+    const spec = Math.pow(Math.max(0,lf-0.4),3)*1.5;
+    let rv,gv,bv;
+    if(isPole){rv=210;gv=230;bv=255;}
+    else{
+      const depth=(0.5-Math.abs(n-0.5))*2;
+      rv=Math.min(255,10+spec*200); gv=Math.min(255,50+depth*30+spec*100); bv=Math.min(255,150+depth*80+spec*80);
+    }
+    const i=(y*120+x)*4;
+    d[i]=Math.min(255,rv*lit);d[i+1]=Math.min(255,gv*lit);d[i+2]=Math.min(255,bv*lit);d[i+3]=255;
+  }
+  ctx.putImageData(img,0,0);
+  const cc=document.getElementById('c-ocean-clouds');
+  const cctx=cc.getContext('2d');
+  const ci2=cctx.createImageData(120,120);
+  const cd=ci2.data;
+  for(let y=0;y<120;y++) for(let x=0;x<120;x++) {
+    const dx=x-60,dy=y-60;
+    if(dx*dx+dy*dy>r*r) continue;
+    const u=(x/120)*4+20,v=(y/120)*4+20;
+    const n2=fbm(u,v,4);
+    const alpha=Math.max(0,n2-0.38)*4;
+    const lf=lightFactor(x,y,r,35,30);
+    const lit=0.5+lf*0.6;
+    const i=(y*120+x)*4;
+    cd[i]=Math.min(255,245*lit);cd[i+1]=Math.min(255,248*lit);cd[i+2]=Math.min(255,255*lit);cd[i+3]=Math.min(255,alpha*255);
+  }
+  cctx.putImageData(ci2,0,0);
+})();
+
+// ---- ROCKY / MARS ----
+(function() {
+  const cv = document.getElementById('c-rocky');
+  const ctx = cv.getContext('2d');
+  const r = 60;
+  const img = ctx.createImageData(120,120);
+  const d = img.data;
+  for(let y=0;y<120;y++) for(let x=0;x<120;x++) {
+    const dx=x-60,dy=y-60;
+    if(dx*dx+dy*dy>r*r) continue;
+    const u=(x/120)*6+3,v=(y/120)*6+3;
+    const n=fbm(u,v);
+    const n2=fbm(u*3,v*3,3)*0.3;
+    const crater=fbm(u*2+8,v*2+8,3);
+    const isCrater=crater>0.7 && n2<0.15;
+    const lf=lightFactor(x,y,r,35,35);
+    const lit=0.3+lf*0.85;
+    let rv,gv,bv;
+    if(isCrater){rv=60;gv=35;bv=30;}
+    else{
+      const elev=n;
+      rv=Math.min(200,120+elev*80); gv=Math.min(130,55+elev*50); bv=Math.min(70,30+elev*20);
+    }
+    const i=(y*120+x)*4;
+    d[i]=Math.min(255,rv*lit);d[i+1]=Math.min(255,gv*lit);d[i+2]=Math.min(255,bv*lit);d[i+3]=255;
+  }
+  ctx.putImageData(img,0,0);
+})();
+</script>
+</body>
+</html>

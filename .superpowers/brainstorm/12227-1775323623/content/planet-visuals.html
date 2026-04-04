@@ -1,0 +1,132 @@
+<h2>Data-Driven Visual Effects</h2>
+<p class="subtitle">What we can render in Three.js from the actual exoplanet data fields</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:8px">
+
+  <!-- Rocky -->
+  <div style="background:#0d0d22;border:1px solid #1e1e4a;border-radius:10px;padding:16px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <div style="width:52px;height:52px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 30%, #c8855a, #8b4a20, #4a2010);box-shadow:0 0 14px #c8855a22"></div>
+      <div>
+        <div style="color:#ccd;font-size:12px;font-weight:600">Rocky / Terrestrial</div>
+        <div style="color:#4a7aff;font-size:9px;margin-top:2px">ρ > 4 g/cm³ · R < 1.5 R⊕</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Cratered, dusty surface texture</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Red/brown/grey tones from density</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Thin or no atmosphere glow</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#fc8;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Ice caps if eq. temp &lt; 200K</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#f44;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Glowing lava cracks if temp &gt; 1000K</span></div>
+    </div>
+  </div>
+
+  <!-- Water World -->
+  <div style="background:#0d0d22;border:1px solid #1e1e4a;border-radius:10px;padding:16px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <div style="width:52px;height:52px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 30%, #60c8ff, #1a6aaa, #0a3060);box-shadow:0 0 14px #60c8ff33;position:relative">
+        <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.15) 0%, transparent 60%)"></div>
+      </div>
+      <div>
+        <div style="color:#ccd;font-size:12px;font-weight:600">Ocean / Water World</div>
+        <div style="color:#4a7aff;font-size:9px;margin-top:2px">R 1.5–2.5 R⊕ · low density · ~300K</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Deep blue ocean with specular shine</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Swirling cloud layer (semi-transparent)</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Blue atmospheric rim glow</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#fc8;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Polar ice caps from eq. temp</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#fc8;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Scattered landmass if density is higher</span></div>
+    </div>
+  </div>
+
+  <!-- Super Earth -->
+  <div style="background:#0d0d22;border:1px solid #1e1e4a;border-radius:10px;padding:16px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <div style="width:52px;height:52px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 30%, #7ac87a, #2a7a3a, #1a4a20);box-shadow:0 0 14px #7ac87a22;position:relative">
+        <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.1) 0%, transparent 60%)"></div>
+      </div>
+      <div>
+        <div style="color:#ccd;font-size:12px;font-weight:600">Super-Earth / Habitable</div>
+        <div style="color:#4a7aff;font-size:9px;margin-top:2px">R 1–2 R⊕ · insol ~0.25–1.5 F⊕</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Green/blue mixed surface (land + ocean)</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Thin atmosphere glow (blue-white)</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Cloud layer density from insolation flux</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">"Habitable zone" badge from flux range</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#fc8;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Ice/desert shift based on temp</span></div>
+    </div>
+  </div>
+
+  <!-- Sub-Neptune -->
+  <div style="background:#0d0d22;border:1px solid #1e1e4a;border-radius:10px;padding:16px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <div style="width:52px;height:52px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 30%, #9ab8ff, #4a5acc, #1a1a7a);box-shadow:0 0 16px #9ab8ff33"></div>
+      <div>
+        <div style="color:#ccd;font-size:12px;font-weight:600">Sub-Neptune / Ice Giant</div>
+        <div style="color:#4a7aff;font-size:9px;margin-top:2px">R 2–4 R⊕ · low density</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Blue-purple hazy atmosphere</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Subtle banding in cloud layer</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Strong rim glow (thick atmosphere)</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#fc8;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Rings if radius is on the larger end</span></div>
+    </div>
+  </div>
+
+  <!-- Gas Giant -->
+  <div style="background:#0d0d22;border:1px solid #1e1e4a;border-radius:10px;padding:16px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <div style="width:52px;height:52px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 30%, #f0c878, #c07820, #7a4a08);box-shadow:0 0 16px #f0c87844;position:relative">
+        <div style="position:absolute;top:36%;left:6%;right:6%;height:5px;border-radius:50%;background:rgba(160,100,10,0.4)"></div>
+        <div style="position:absolute;top:55%;left:4%;right:4%;height:3px;border-radius:50%;background:rgba(80,40,5,0.35)"></div>
+      </div>
+      <div>
+        <div style="color:#ccd;font-size:12px;font-weight:600">Gas Giant</div>
+        <div style="color:#4a7aff;font-size:9px;margin-top:2px">R > 4 R⊕ · M > 50 M⊕ · low density</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Animated horizontal cloud bands</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Great spot storm (procedural)</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Ring system (optional, data-driven)</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#fc8;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Color shifts warm→cool by eq. temp</span></div>
+    </div>
+  </div>
+
+  <!-- Hot Jupiter -->
+  <div style="background:#0d0d22;border:1px solid #1e1e4a;border-radius:10px;padding:16px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <div style="width:52px;height:52px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 30%, #ff8844, #cc3300, #660000);box-shadow:0 0 20px #ff442244;position:relative">
+        <div style="position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(ellipse, transparent 48%, rgba(255,100,0,0.15) 60%, transparent 75%)"></div>
+      </div>
+      <div>
+        <div style="color:#ccd;font-size:12px;font-weight:600">Hot Jupiter</div>
+        <div style="color:#4a7aff;font-size:9px;margin-top:2px">R > 8 R⊕ · temp &gt; 1000K · high insol</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Glowing orange-red surface</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Atmospheric ablation on star-facing side</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#4c4;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Intense rim glow (heated atmosphere)</span></div>
+      <div style="display:flex;gap:6px;align-items:flex-start"><span style="color:#fc8;font-size:10px;margin-top:1px">✦</span><span style="color:#888;font-size:10px">Tidal-lock day/night terminator line</span></div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:16px;background:#0a0a1e;border:1px solid #1e2e4a;border-radius:8px;padding:12px 16px">
+  <div style="color:#4a7aff;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">Universal Effects (applied to all types)</div>
+  <div style="display:flex;gap:24px;flex-wrap:wrap">
+    <div style="color:#888;font-size:10px">✦ Star-direction lighting from host star type</div>
+    <div style="color:#888;font-size:10px">✦ Slow rotation animation (period-scaled)</div>
+    <div style="color:#888;font-size:10px">✦ Starfield background</div>
+    <div style="color:#888;font-size:10px">✦ Mouse-drag orbit controls</div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:12px">Green ✦ = always present for that type &nbsp;·&nbsp; Orange ✦ = conditional on data values</p>

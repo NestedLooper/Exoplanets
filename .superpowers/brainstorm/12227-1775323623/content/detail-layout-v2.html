@@ -1,0 +1,98 @@
+<h2>Layout C — Refined</h2>
+<p class="subtitle">More breathing room around the planet, host star as a clickable link</p>
+
+<div class="mockup">
+  <div class="mockup-header">Planet Detail — Kepler-452 b</div>
+  <div class="mockup-body" style="background:#07071a;padding:0;overflow:hidden;border-radius:0 0 8px 8px">
+
+    <!-- Nav bar -->
+    <div style="background:#0d0d2a;padding:10px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #1e1e4a">
+      <span style="color:#4a7aff;font-size:12px;cursor:pointer">← Back to results</span>
+      <span style="color:#333;font-size:12px">|</span>
+      <span style="color:#7af;font-size:13px;font-family:monospace;font-weight:600">Kepler-452 b</span>
+      <span style="margin-left:auto;background:#1e3a1e;border-radius:4px;padding:3px 8px;color:#4c4;font-size:10px">Gas Giant</span>
+    </div>
+
+    <!-- Main content -->
+    <div style="display:flex;gap:0;min-height:340px">
+
+      <!-- 3D planet viewport — more horizontal padding -->
+      <div style="flex:1;background:radial-gradient(ellipse at center, #0d0d2e 0%, #030310 100%);display:flex;align-items:center;justify-content:center;padding:40px 60px;position:relative">
+        <!-- planet -->
+        <div style="width:140px;height:140px;border-radius:50%;background:radial-gradient(circle at 38% 32%, #f0b84a 0%, #c07820 40%, #7a4a08 80%, #3a2004 100%);box-shadow:0 0 60px #e8a84a33, inset -20px -10px 40px rgba(0,0,0,0.6);position:relative">
+          <!-- band lines -->
+          <div style="position:absolute;top:38%;left:8%;right:8%;height:6px;background:rgba(180,120,20,0.3);border-radius:50%"></div>
+          <div style="position:absolute;top:55%;left:5%;right:5%;height:4px;background:rgba(100,60,10,0.3);border-radius:50%"></div>
+        </div>
+        <!-- subtle orbit ring hint -->
+        <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#2a2a5a;font-size:9px;letter-spacing:2px">· · · THREE.JS CANVAS · · ·</div>
+      </div>
+
+      <!-- Stats panel -->
+      <div style="width:220px;background:#0d0d22;border-left:1px solid #1e1e4a;padding:16px;display:flex;flex-direction:column;gap:14px;overflow-y:auto">
+
+        <!-- Physical -->
+        <div>
+          <div style="color:#4a7aff;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Physical</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Radius</span><span style="color:#ccd;font-size:10px">1.63 R⊕</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Mass</span><span style="color:#ccd;font-size:10px">3.0 M⊕</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Density</span><span style="color:#ccd;font-size:10px">3.8 g/cm³</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Eq. Temp</span><span style="color:#ccd;font-size:10px">265 K</span></div>
+          </div>
+        </div>
+
+        <div style="height:1px;background:#1a1a3a"></div>
+
+        <!-- Orbital -->
+        <div>
+          <div style="color:#4a7aff;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Orbital</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Period</span><span style="color:#ccd;font-size:10px">384.8 days</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Semi-axis</span><span style="color:#ccd;font-size:10px">1.04 au</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Eccentricity</span><span style="color:#ccd;font-size:10px">—</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Insolation</span><span style="color:#ccd;font-size:10px">1.11 F⊕</span></div>
+          </div>
+        </div>
+
+        <div style="height:1px;background:#1a1a3a"></div>
+
+        <!-- Host Star — linkable -->
+        <div>
+          <div style="color:#4a7aff;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Host Star</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="color:#555;font-size:10px">Name</span>
+              <span style="color:#4a9eff;font-size:10px;cursor:pointer;text-decoration:underline;text-underline-offset:2px">Kepler-452 ↗</span>
+            </div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Type</span><span style="color:#ccd;font-size:10px">G2 (Sun-like)</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Distance</span><span style="color:#ccd;font-size:10px">1402 ly</span></div>
+          </div>
+          <!-- star preview -->
+          <div style="margin-top:10px;background:#0a0a1e;border-radius:6px;padding:10px;display:flex;align-items:center;gap:10px;cursor:pointer;border:1px solid #1e1e4a;transition:border-color 0.2s" onmouseover="this.style.borderColor='#4a7aff'" onmouseout="this.style.borderColor='#1e1e4a'">
+            <div style="width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 38% 32%, #fff8e0, #ffd060, #ff8800);box-shadow:0 0 12px #ffd06066;flex-shrink:0"></div>
+            <div>
+              <div style="color:#ccd;font-size:10px">Kepler-452</div>
+              <div style="color:#4a7aff;font-size:9px">View star →</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:1px;background:#1a1a3a"></div>
+
+        <!-- Discovery -->
+        <div>
+          <div style="color:#4a7aff;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Discovery</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Year</span><span style="color:#ccd;font-size:10px">2015</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Method</span><span style="color:#ccd;font-size:10px">Transit</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#555;font-size:10px">Facility</span><span style="color:#ccd;font-size:10px">Kepler</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:16px">The "Host Star" section has a clickable card that navigates to a star detail view (same layout, starring the star's 3D render instead). Does this direction feel right?</p>

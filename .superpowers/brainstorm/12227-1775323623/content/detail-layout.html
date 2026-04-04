@@ -1,0 +1,94 @@
+<h2>Planet Detail Page Layout</h2>
+<p class="subtitle">How should the 3D model and planet data be arranged?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a1a;padding:16px;min-height:180px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;gap:10px;height:160px">
+        <div style="flex:1;background:#1a1a3e;border-radius:8px;display:flex;align-items:center;justify-content:center">
+          <div style="width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 35% 35%, #e07b54, #8b3a1a);box-shadow:0 0 20px #e07b5444"></div>
+        </div>
+        <div style="width:180px;background:#111130;border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:6px">
+          <div style="color:#7af;font-size:11px;font-family:monospace">Kepler-442 b</div>
+          <div style="height:1px;background:#2a2a4a"></div>
+          <div style="color:#aaa;font-size:9px">Radius: 1.34 R⊕</div>
+          <div style="color:#aaa;font-size:9px">Mass: 2.3 M⊕</div>
+          <div style="color:#aaa;font-size:9px">Temp: 233 K</div>
+          <div style="color:#aaa;font-size:9px">Period: 112.3 days</div>
+          <div style="color:#aaa;font-size:9px">Type: Super-Earth</div>
+          <div style="margin-top:4px;background:#1e3a1e;border-radius:4px;padding:4px;color:#4a4;font-size:9px;text-align:center">Habitable Zone</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Side by Side</h3>
+      <p>3D model left, stats panel right. Classic split layout, maximizes model size.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a1a;padding:16px;min-height:180px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;flex-direction:column;gap:8px;height:160px">
+        <div style="flex:1;background:#1a1a3e;border-radius:8px;display:flex;align-items:center;justify-content:center;position:relative">
+          <div style="width:70px;height:70px;border-radius:50%;background:radial-gradient(circle at 35% 35%, #4a9eff, #1a3a8a);box-shadow:0 0 20px #4a9eff44"></div>
+          <div style="position:absolute;bottom:8px;left:8px;color:#7af;font-size:10px;font-family:monospace">Kepler-22 b</div>
+          <div style="position:absolute;top:8px;right:8px;background:#1e3a1e;border-radius:4px;padding:2px 6px;color:#4a4;font-size:9px">Super-Earth</div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <div style="flex:1;background:#111130;border-radius:6px;padding:6px;text-align:center">
+            <div style="color:#7af;font-size:10px">1.9 R⊕</div>
+            <div style="color:#666;font-size:8px">Radius</div>
+          </div>
+          <div style="flex:1;background:#111130;border-radius:6px;padding:6px;text-align:center">
+            <div style="color:#7af;font-size:10px">295 K</div>
+            <div style="color:#666;font-size:8px">Temp</div>
+          </div>
+          <div style="flex:1;background:#111130;border-radius:6px;padding:6px;text-align:center">
+            <div style="color:#7af;font-size:10px">289.9d</div>
+            <div style="color:#666;font-size:8px">Period</div>
+          </div>
+          <div style="flex:1;background:#111130;border-radius:6px;padding:6px;text-align:center">
+            <div style="color:#7af;font-size:10px">0.85 au</div>
+            <div style="color:#666;font-size:8px">Orbit</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Immersive + Cards Below</h3>
+      <p>Large 3D model dominates, stat cards strip along the bottom. More cinematic.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a1a;padding:16px;min-height:180px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;flex-direction:column;gap:6px;height:160px">
+        <div style="background:#111130;border-radius:6px;padding:6px;display:flex;align-items:center;gap:8px">
+          <div style="color:#7af;font-size:10px;font-family:monospace;flex:1">← Kepler-452 b</div>
+          <div style="color:#666;font-size:9px">Gas Giant · 1.6 R⊕</div>
+        </div>
+        <div style="display:flex;gap:8px;flex:1">
+          <div style="flex:1;background:#1a1a3e;border-radius:8px;display:flex;align-items:center;justify-content:center">
+            <div style="width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 35% 35%, #e8a84a, #8a5010);box-shadow:0 0 15px #e8a84a44"></div>
+          </div>
+          <div style="width:140px;background:#111130;border-radius:8px;padding:8px;font-size:9px;color:#aaa;display:flex;flex-direction:column;gap:4px;overflow:hidden">
+            <div style="color:#7af;font-size:9px">Physical</div>
+            <div>Radius: 1.63 R⊕</div>
+            <div>Temp: 265 K</div>
+            <div style="color:#7af;font-size:9px;margin-top:2px">Orbital</div>
+            <div>Period: 384.8d</div>
+            <div>Semi-axis: 1.04 au</div>
+            <div style="color:#7af;font-size:9px;margin-top:2px">Star</div>
+            <div>Host: Kepler-452</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Grouped Stats Panel</h3>
+      <p>Stats grouped by category (Physical / Orbital / Star) in a scrollable side panel.</p>
+    </div>
+  </div>
+
+</div>
