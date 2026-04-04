@@ -1,7 +1,9 @@
-import { fetchPlanetOfTheDay, fetchPlanets } from '@/lib/tap'
+import { fetchPlanetOfTheDay, fetchPlanets, PAGE_SIZE } from '@/lib/tap'
 import { HeroPlanet } from '@/components/ui/HeroPlanet'
 import { PlanetGrid } from '@/components/ui/PlanetGrid'
-import type { FilterParams } from '@/types/planet'
+import type { FilterParams, PlanetType } from '@/types/planet'
+
+const VALID_TYPES: PlanetType[] = ['rocky', 'ocean-world', 'earth-like', 'sub-neptune', 'gas-giant', 'hot-jupiter', 'unknown']
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | undefined }>
@@ -10,9 +12,12 @@ interface PageProps {
 export default async function HomePage({ searchParams }: PageProps) {
   const sp = await searchParams
 
+  const rawType = sp.type
+  const type = VALID_TYPES.includes(rawType as PlanetType) ? (rawType as PlanetType) : undefined
+
   const filters: FilterParams = {
     q:          sp.q,
-    type:       sp.type as FilterParams['type'],
+    type,
     tempMin:    sp.tempMin ? Number(sp.tempMin) : undefined,
     tempMax:    sp.tempMax ? Number(sp.tempMax) : undefined,
     radiusMin:  sp.radiusMin ? Number(sp.radiusMin) : undefined,
@@ -26,7 +31,7 @@ export default async function HomePage({ searchParams }: PageProps) {
     fetchPlanets(filters),
   ])
 
-  const hasMore = planets.length === 24
+  const hasMore = planets.length === PAGE_SIZE
 
   return (
     <div className="flex flex-col gap-10">
