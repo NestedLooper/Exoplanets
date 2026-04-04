@@ -43,9 +43,15 @@ export async function fetchPlanets(filters: FilterParams): Promise<PlanetData[]>
   }
 
   const where = conditions.join(' AND ')
-  const adql = `SELECT TOP ${PAGE_SIZE} ${PLANET_FIELDS} FROM pscomppars WHERE ${where} ORDER BY pl_name`
+  const isTypeFiltered = !!filters.type
+  const fetchLimit = isTypeFiltered ? 200 : PAGE_SIZE
+  const adql = `SELECT TOP ${fetchLimit} ${PLANET_FIELDS} FROM pscomppars WHERE ${where} ORDER BY pl_name`
   const rows = await tapQuery<PlanetData>(adql)
-  return rows.map(attachType)
+  const classified = rows.map(attachType)
+  const filtered = filters.type
+    ? classified.filter(p => p.planetType === filters.type)
+    : classified
+  return filtered.slice(0, PAGE_SIZE)
 }
 
 export async function fetchPlanet(name: string): Promise<PlanetData | null> {
@@ -74,7 +80,7 @@ export async function fetchStar(hostname: string): Promise<StarData | null> {
 }
 
 export async function fetchAllStarPositions(): Promise<Pick<PlanetData, 'hostname' | 'ra' | 'dec' | 'sy_dist' | 'st_spectype'>[]> {
-  const adql = `SELECT ${STAR_POSITION_FIELDS} FROM pscomppars WHERE sy_dist IS NOT NULL AND ra IS NOT NULL AND dec IS NOT NULL`
+  const adql = `SELECT DISTINCT TOP 10000 ${STAR_POSITION_FIELDS} FROM pscomppars WHERE sy_dist IS NOT NULL AND ra IS NOT NULL AND dec IS NOT NULL ORDER BY hostname`
   return tapQuery(adql)
 }
 

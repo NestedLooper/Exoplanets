@@ -32,10 +32,13 @@ export default async function HomePage({ searchParams }: PageProps) {
   ])
 
   const hasMore = planets.length === PAGE_SIZE
+  const randomPlanet = planets.length > 0
+    ? planets[Math.floor(Math.random() * planets.length)]
+    : null
 
   return (
     <div className="flex flex-col gap-10">
-      {hero && <HeroPlanet planet={hero} />}
+      {hero && <HeroPlanet planet={hero} randomPlanetName={randomPlanet?.pl_name} />}
       <PlanetGrid planets={planets} filters={filters} hasMore={hasMore} />
     </div>
   )
