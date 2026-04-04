@@ -12,7 +12,7 @@ const PLANET_FIELDS = [
 
 const STAR_POSITION_FIELDS = 'hostname,ra,dec,sy_dist,st_spectype,st_teff,st_rad'
 
-const PAGE_SIZE = 24
+export const PAGE_SIZE = 24
 
 async function tapQuery<T>(adql: string): Promise<T[]> {
   const url = `${BASE_URL}?query=${encodeURIComponent(adql)}&format=json`

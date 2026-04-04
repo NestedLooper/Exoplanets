@@ -21,6 +21,8 @@ export default async function StarPage({ params }: Props) {
   if (!star) notFound()
 
   return (
+    <>
+    {/* Height = viewport minus nav bar (73px: py-4 + text + border ≈ 73px) */}
     <div className="flex h-[calc(100vh-73px)] overflow-hidden rounded-2xl border border-slate-800">
       {/* Left: 3D star viewer */}
       <div className="relative flex-[3] bg-[#03030f]">
@@ -36,7 +38,8 @@ export default async function StarPage({ params }: Props) {
           <h1 className="mt-1 text-2xl font-bold text-white">{star.hostname}</h1>
           <p className="mt-1 text-sm text-slate-400">
             {star.st_spectype ?? 'Unknown type'} star
-            {star.sy_dist != null ? ` · ${Math.round(star.sy_dist * 3.26)} light years away` : ''}
+            {/* parsecs * 3.26 ≈ light-years */}
+            {star.sy_dist != null ? ` · ${(star.sy_dist * 3.26).toFixed(0)} light years away` : ''}
           </p>
         </div>
 
@@ -75,5 +78,6 @@ export default async function StarPage({ params }: Props) {
         </div>
       </div>
     </div>
+    </>
   )
 }

@@ -22,6 +22,8 @@ export default async function PlanetPage({ params }: Props) {
   const type = planet.planetType ?? 'unknown'
 
   return (
+    <>
+    {/* Height = viewport minus nav bar (73px: py-4 + text + border ≈ 73px) */}
     <div className="flex h-[calc(100vh-73px)] overflow-hidden rounded-2xl border border-slate-800">
       {/* Left: 3D viewer — 60% width, fills height */}
       <div className="relative flex-[3] bg-[#03030f]">
@@ -40,5 +42,6 @@ export default async function PlanetPage({ params }: Props) {
         <StatPanel planet={planet} />
       </div>
     </div>
+    </>
   )
 }

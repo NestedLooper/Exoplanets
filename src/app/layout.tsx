@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import type { ReactNode } from 'react'
 import { Inter } from 'next/font/google'
 import './globals.css'
 
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
   description: 'Explore confirmed exoplanets from the NASA Archive',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="dark">
       <body className={`${inter.className} min-h-screen bg-[#07071a] text-slate-200`}>
