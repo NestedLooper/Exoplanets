@@ -1,5 +1,7 @@
 # Exoplanets
 
+**Live demo:** https://exoplanets-roan.vercel.app
+
 A Next.js app that pulls confirmed exoplanet data from the [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu/) and renders each planet as a realistic, data-driven 3D model. Browse thousands of known exoplanets, explore individual planet and star systems, and navigate an interactive 3D star neighborhood map.
 
 ## Features
