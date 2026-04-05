@@ -35,12 +35,12 @@ export function PlanetScene({
       style={fill ? { width: '100%', height: '100%' } : { width: 96, height: 96 }}
     >
       <Canvas
-        camera={{ position: [0, 0, 5], fov: 45 }}
+        camera={{ position: [0, 0, fill ? 10 : 5], fov: 45 }}
         gl={{ antialias: true, alpha: true }}
         style={{ background: 'transparent' }}
       >
         <Stars radius={80} depth={50} count={4000} factor={3} fade speed={0.6} />
-        <ambientLight intensity={0.15} />
+        <ambientLight intensity={0.22} />
         <directionalLight
           color={lightColor}
           intensity={2.2}
@@ -53,8 +53,8 @@ export function PlanetScene({
           enableZoom={fill}
           enablePan={false}
           autoRotate={false}
-          minDistance={3}
-          maxDistance={10}
+          minDistance={fill ? 4 : 3}
+          maxDistance={fill ? 20 : 10}
         />
       </Canvas>
     </div>

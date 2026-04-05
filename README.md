@@ -22,6 +22,19 @@ A Next.js app that pulls confirmed exoplanet data from the [NASA Exoplanet Archi
 
 All visuals are procedural (no image textures). Each planet's appearance is deterministic — seeded from its name via djb2 hash so it always looks the same across visits.
 
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center"><img src="assets/1_SearchExoplanets.png" width="420" alt="Search exoplanets"/><br/><sub>Search &amp; filter planets</sub></td>
+    <td align="center"><img src="assets/2_ViewPlanetDetails.png" width="420" alt="Planet detail view"/><br/><sub>Planet detail — 3D viewer &amp; stats</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/3_ViewHostStarDetails.png" width="420" alt="Host star detail"/><br/><sub>Host star — plasma surface &amp; system info</sub></td>
+    <td align="center"><img src="assets/4_ViewStarOnStarmap.png" width="420" alt="Interactive star map"/><br/><sub>Interactive 3D star map</sub></td>
+  </tr>
+</table>
+
 ## Running locally
 
 **Prerequisites:** Node.js 18+

@@ -37,8 +37,8 @@ export default async function PlanetPage({ params }: Props) {
         </PlanetScene>
       </div>
 
-      {/* Right: Stats panel — 40% width */}
-      <div className="flex-[2] overflow-y-auto border-l border-slate-800 bg-slate-950">
+      {/* Right: Stats panel — 40% width, flex column so header never scrolls */}
+      <div className="flex flex-[2] flex-col overflow-hidden border-l border-slate-800 bg-slate-950">
         <StatPanel planet={planet} />
       </div>
     </div>

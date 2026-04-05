@@ -7,13 +7,16 @@ import * as THREE from 'three'
 import type { PlanetType } from '@/types/planet'
 import { planetSeedNorm } from '@/lib/seed'
 
-import planetVert from './shaders/planet.vert.glsl'
-import rockyFrag from './shaders/rocky.frag.glsl'
-import gasGiantFrag from './shaders/gas-giant.frag.glsl'
-import hotJupiterFrag from './shaders/hot-jupiter.frag.glsl'
-import oceanFrag from './shaders/ocean.frag.glsl'
-import earthLikeFrag from './shaders/earth-like.frag.glsl'
-import subNeptuneFrag from './shaders/sub-neptune.frag.glsl'
+import {
+  planetVert,
+  rockyFrag,
+  gasGiantFrag,
+  hotJupiterFrag,
+  oceanFrag,
+  earthLikeFrag,
+  subNeptuneFrag,
+  cloudFrag,
+} from './shaders'
 
 const defaultUniforms = {
   uSeed: 0.5,
@@ -29,6 +32,7 @@ const HotJupiterMaterial = shaderMaterial(defaultUniforms, planetVert, hotJupite
 const OceanMaterial      = shaderMaterial(defaultUniforms, planetVert, oceanFrag)
 const EarthLikeMaterial  = shaderMaterial(defaultUniforms, planetVert, earthLikeFrag)
 const SubNeptuneMaterial = shaderMaterial(defaultUniforms, planetVert, subNeptuneFrag)
+const CloudMaterial      = shaderMaterial({ uSeed: 0.5, uTime: 0.0 }, planetVert, cloudFrag)
 
 extend({
   RockyMaterial,
@@ -37,27 +41,24 @@ extend({
   OceanMaterial,
   EarthLikeMaterial,
   SubNeptuneMaterial,
+  CloudMaterial,
 })
 
 function CloudSphere({ radius, seed }: { radius: number; seed: number }) {
-  const meshRef = useRef<THREE.Mesh>(null!)
-  useFrame((_, delta) => {
-    meshRef.current.rotation.y += delta * 0.05
+  const meshRef  = useRef<THREE.Mesh>(null!)
+  const cloudRef = useRef<THREE.ShaderMaterial>(null!)
+
+  useFrame((state, delta) => {
+    if (!meshRef.current) return
+    meshRef.current.rotation.y += delta * 0.04
+    if (cloudRef.current) cloudRef.current.uniforms.uTime.value = state.clock.elapsedTime
   })
-  const mat = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0.95, 0.97, 1.0),
-        transparent: true,
-        opacity: 0.45,
-        depthWrite: false,
-      }),
-    []
-  )
+
   return (
-    <mesh ref={meshRef} renderOrder={1}>
-      <sphereGeometry args={[radius * 1.018, 64, 64]} />
-      <primitive object={mat} attach="material" />
+    <mesh ref={meshRef} renderOrder={2}>
+      <sphereGeometry args={[radius * 1.022, 128, 128]} />
+      {/* @ts-expect-error — cloudMaterial is registered via extend */}
+      <cloudMaterial ref={cloudRef} uSeed={seed} transparent depthWrite={false} />
     </mesh>
   )
 }
@@ -90,6 +91,7 @@ export function Planet({
   const hasClouds = type === 'earth-like' || type === 'ocean-world'
 
   useFrame((state, delta) => {
+    if (!meshRef.current) return
     meshRef.current.rotation.y += delta * 0.08
     if (matRef.current) {
       matRef.current.uniforms.uTime.value = state.clock.elapsedTime
@@ -121,7 +123,7 @@ export function Planet({
   return (
     <group>
       <mesh ref={meshRef}>
-        <sphereGeometry args={[radius, 128, 128]} />
+        <sphereGeometry args={[radius, large ? 256 : 64, large ? 256 : 64]} />
         {materialJsx}
       </mesh>
       {hasClouds && <CloudSphere radius={radius} seed={seed} />}
