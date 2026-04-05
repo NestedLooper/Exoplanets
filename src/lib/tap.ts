@@ -85,12 +85,15 @@ export async function fetchAllStarPositions(): Promise<Pick<PlanetData, 'hostnam
 }
 
 export async function fetchPlanetOfTheDay(): Promise<PlanetData | null> {
+  // ADQL doesn't support OFFSET, so fetch all names (lightweight) and pick by day index
+  const nameAdql = `SELECT TOP 6000 pl_name FROM pscomppars WHERE pl_controv_flag = 0 AND pl_rade IS NOT NULL ORDER BY pl_name`
+  const nameRows = await tapQuery<{ pl_name: string }>(nameAdql)
+  if (nameRows.length === 0) return null
+
   const today = new Date()
   const dayOfYear = Math.floor(
     (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000
   )
-  const offset = dayOfYear % 5500
-  const adql = `SELECT TOP 1 ${PLANET_FIELDS} FROM pscomppars WHERE pl_controv_flag = 0 AND pl_rade IS NOT NULL ORDER BY pl_name OFFSET ${offset} ROWS`
-  const rows = await tapQuery<PlanetData>(adql)
-  return rows.length > 0 ? attachType(rows[0]) : null
+  const name = nameRows[dayOfYear % nameRows.length].pl_name
+  return fetchPlanet(name)
 }

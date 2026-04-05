@@ -32,10 +32,13 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
   const pathname     = usePathname()
   const searchParams = useSearchParams()
 
-  const updateParam = useCallback(
-    (key: string, value: string) => {
+  // Accept multiple key→value pairs so all changes land in a single router.push
+  const updateParams = useCallback(
+    (updates: Record<string, string>) => {
       const params = new URLSearchParams(searchParams.toString())
-      if (value) params.set(key, value); else params.delete(key)
+      for (const [key, value] of Object.entries(updates)) {
+        if (value) params.set(key, value); else params.delete(key)
+      }
       params.delete('cursor')
       router.push(`${pathname}?${params.toString()}`)
     },
@@ -50,7 +53,7 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
         aria-label="Search"
         value={filters.q ?? ''}
         onChange={(e) => {
-          updateParam('q', e.target.value)
+          updateParams({ q: e.target.value })
           onChange({ ...filters, q: e.target.value || undefined, cursor: undefined })
         }}
         className="min-w-[180px] flex-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:outline-none"
@@ -60,7 +63,7 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
         aria-label="Type"
         value={filters.type ?? ''}
         onChange={(e) => {
-          updateParam('type', e.target.value)
+          updateParams({ type: e.target.value })
           onChange({ ...filters, type: (e.target.value as PlanetType) || undefined, cursor: undefined })
         }}
         className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-200 focus:border-blue-500 focus:outline-none"
@@ -81,12 +84,10 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
           const val = e.target.value
           if (val) {
             const [min, max] = val.split('-').map(Number)
-            updateParam('tempMin', String(min))
-            updateParam('tempMax', String(max))
+            updateParams({ tempMin: String(min), tempMax: String(max) })
             onChange({ ...filters, tempMin: min, tempMax: max, cursor: undefined })
           } else {
-            updateParam('tempMin', '')
-            updateParam('tempMax', '')
+            updateParams({ tempMin: '', tempMax: '' })
             onChange({ ...filters, tempMin: undefined, tempMax: undefined, cursor: undefined })
           }
         }}

@@ -24,9 +24,9 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export function StatPanel({ planet }: { planet: PlanetData }) {
   return (
-    <div className="flex flex-col gap-5 overflow-y-auto px-6 py-6">
-      {/* Sticky header */}
-      <div className="sticky top-0 z-10 -mx-6 -mt-6 flex items-center justify-between border-b border-slate-800 bg-slate-950/90 px-6 py-4 backdrop-blur">
+    <div className="flex h-full flex-col">
+      {/* Fixed header — lives outside the scroll container */}
+      <div className="flex shrink-0 items-center justify-between border-b border-slate-800 px-6 py-4">
         <div>
           <Link href="/" className="text-xs text-slate-500 hover:text-slate-300">
             ← Back
@@ -38,6 +38,8 @@ export function StatPanel({ planet }: { planet: PlanetData }) {
         </span>
       </div>
 
+      {/* Scrollable body */}
+      <div className="flex flex-col gap-5 overflow-y-auto px-6 py-5">
       <Section title="Physical">
         <Row label="Radius"   value={planet.pl_rade != null ? `${planet.pl_rade} R⊕` : null} />
         <Row label="Mass"     value={planet.pl_bmasse != null ? `${planet.pl_bmasse} M⊕` : null} />
@@ -69,13 +71,24 @@ export function StatPanel({ planet }: { planet: PlanetData }) {
 
       <Section title="Location">
         <SkyWidget ra={planet.ra} dec={planet.dec} hostname={planet.hostname} />
-        <Link
-          href={`/map?highlight=${encodeURIComponent(planet.hostname)}`}
-          className="mt-1 text-xs text-blue-400 hover:underline"
-        >
-          View on star map →
-        </Link>
+        <div className="mt-1 flex items-center justify-between">
+          <Link
+            href={`/map?highlight=${encodeURIComponent(planet.hostname)}`}
+            className="text-xs text-blue-400 hover:underline"
+          >
+            View on star map →
+          </Link>
+          <a
+            href={`https://exoplanetarchive.ipac.caltech.edu/overview/${encodeURIComponent(planet.pl_name)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-blue-400 hover:underline"
+          >
+            NASA Archive ↗
+          </a>
+        </div>
       </Section>
+      </div>
     </div>
   )
 }
