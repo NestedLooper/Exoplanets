@@ -24,8 +24,11 @@
 .DS_Store
 *.pem
 
-# claude code
+# claude code and other AI tooling instructions
 .claude/
+CLAUDE.md
+CLAUDE.local.md
+AGENTS.md
 
 # superpowers (brainstorm sessions, local tooling)
 .superpowers/
